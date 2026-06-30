@@ -272,8 +272,10 @@ const greetings = new Set([
 // most recent message continues seamlessly — and the learner can quote a
 // snippet to branch back to an earlier point.
 for await (const [space, message] of app.messages) {
+  console.log(`[inbound] space=${space.id} type=${message.content.type}`);
   if (message.content.type !== "text") continue;
   const raw = message.content.text.trim();
+  console.log(`[inbound] text="${raw.slice(0, 80)}"`);
   const lower = raw.toLowerCase();
   let s = convos.get(space.id) ?? newState();
   convos.set(space.id, s);
