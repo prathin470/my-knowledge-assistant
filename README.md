@@ -17,6 +17,7 @@ cp .env.example .env
 | `OPENROUTER_MODEL` | no | Any OpenRouter model id. Default `openai/gpt-4o-mini` |
 | `DOC_PATH` | no | Markdown file of seed topics. Default `./knowledge.md` |
 | `LEARNER_PHONE` | no | Number to send the daily morning prompt to. Leave blank to disable |
+| `LEARNER_NAME` | no | Name in the morning greeting (`Good Morning <name>☀️`). Default `[Name]` |
 | `MORNING_CRON` | no | 5-field cron for the morning prompt. Default `0 8 * * *` |
 | `MORNING_TZ` | no | Timezone for the cron. Default `Australia/Sydney` |
 

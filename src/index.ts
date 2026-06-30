@@ -180,6 +180,7 @@ const app = await Spectrum({
 // If LEARNER_PHONE is set, the tutor proactively messages the learner each
 // morning (default 08:00 Sydney time) with a prompt to pick a topic.
 const LEARNER_PHONE = process.env.LEARNER_PHONE?.trim();
+const LEARNER_NAME = process.env.LEARNER_NAME?.trim() || "[Name]";
 const MORNING_CRON = process.env.MORNING_CRON?.trim() || "0 8 * * *";
 const MORNING_TZ = process.env.MORNING_TZ?.trim() || "Australia/Sydney";
 
@@ -192,7 +193,7 @@ async function sendMorning(space: SpaceLike): Promise<void> {
   try {
     const s = newState();
     convos.set(space.id, s);
-    await space.send("Good Morning Prathksha☀️");
+    await space.send(`Good Morning ${LEARNER_NAME}☀️`);
     await space.send(topicList(s));
   } catch (err) {
     console.error("Morning prompt error:", err);
