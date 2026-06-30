@@ -9,10 +9,38 @@ import { PERSONA } from "./persona.js";
 // Each provider in `providers` adds an interface (terminal TUI, iMessage, …).
 // Docs: https://photon.codes/docs/spectrum-ts
 
+// --- Boot diagnostics + required-env validation ----------------------------
+// Print which required vars the runtime actually delivered (name + length,
+// never the value) so a misconfigured deploy (e.g. Railway) is obvious from
+// the logs instead of surfacing as a confusing downstream error.
+const REQUIRED_ENV = [
+  "PROJECT_ID", "PROJECT_SECRET", "OPENROUTER_API_KEY",
+  "OPENROUTER_MODEL", "DOC_PATH", "LEARNER_PHONE", "LEARNER_NAME",
+  "MORNING_CRON", "MORNING_TZ",
+] as const;
+console.log(
+  "[boot] env: " +
+    REQUIRED_ENV.map((k) => {
+      const v = process.env[k];
+      return `${k}=${v ? `set(${v.length})` : "MISSING"}`;
+    }).join(" "),
+);
+
+// Validate the LLM key explicitly so a missing one names the right variable
+// (the OpenAI SDK would otherwise throw a misleading "OPENAI_API_KEY" error).
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY?.trim();
+if (!OPENROUTER_API_KEY) {
+  console.error(
+    "Missing OPENROUTER_API_KEY — set it in your environment (Railway Variables or .env). " +
+      "It's the OpenRouter key (sk-or-…), NOT OPENAI_API_KEY.",
+  );
+  process.exit(1);
+}
+
 // --- LLM (OpenRouter is OpenAI-compatible) ---------------------------------
 const llm = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.OPENROUTER_API_KEY!,
+  apiKey: OPENROUTER_API_KEY,
   defaultHeaders: {
     "HTTP-Referer": "https://photon.codes",
     "X-Title": "imessage-knowledge-assistant",
