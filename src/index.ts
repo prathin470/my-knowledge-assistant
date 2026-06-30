@@ -206,16 +206,21 @@ if (LEARNER_PHONE) {
       console.error(`Invalid MORNING_CRON "${MORNING_CRON}" — morning prompt disabled.`);
     } else {
       // `imessage(app)` narrows the app to its iMessage platform instance
-      // (spaces-and-users.md). Its call signature's return type trips a
+      // (platform-narrowing.md). Its call signature's return type trips a
       // generic-inference check that tsc can't resolve here, so we cast to the
-      // minimal shape we use — the runtime contract is unchanged.
+      // minimal shape we use. Note `space` is a namespace (create/get), not a
+      // callable — unlike the shorthand in the skill docs, this installed
+      // version (5.2.0) exposes `space.create(users)`.
       type ImNarrowed = {
         user: (id: string) => Promise<unknown>;
-        space: (user: unknown) => Promise<SpaceLike>;
+        space: {
+          create: (users: unknown, ...params: unknown[]) => Promise<SpaceLike>;
+          get: (id: string, ...params: unknown[]) => Promise<SpaceLike>;
+        };
       };
       const im = (imessage as unknown as (a: typeof app) => ImNarrowed)(app);
       const learner = await im.user(LEARNER_PHONE);
-      const dm = await im.space(learner);
+      const dm = await im.space.create(learner);
       cronSchedule(MORNING_CRON, () => { void sendMorning(dm); }, { timezone: MORNING_TZ });
       console.log(`Morning prompt scheduled: "${MORNING_CRON}" ${MORNING_TZ} → ${LEARNER_PHONE}`);
     }
