@@ -5,14 +5,19 @@
   "type": "module",
   "scripts": {
     "start": "tsx src/index.ts",
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "spectrum-ts": "^5.2.0"
+    "dotenv": "^16.6.1",
+    "node-cron": "^3.0.3",
+    "openai": "^4.104.0",
+    "spectrum-ts": "^5.2.0",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^22",
-    "tsx": "^4"
+    "@types/node-cron": "^3.0.11",
+    "typescript": "^5"
   }
 }
