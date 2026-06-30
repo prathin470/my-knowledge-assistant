@@ -19,5 +19,8 @@
     "@types/node": "^22",
     "@types/node-cron": "^3.0.11",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@photon-ai/advanced-imessage": "^0.12.0"
   }
 }
