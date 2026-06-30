@@ -192,7 +192,7 @@ async function sendMorning(space: SpaceLike): Promise<void> {
   try {
     const s = newState();
     convos.set(space.id, s);
-    await space.send("Good morning! Let's engage in some amazing discourse today — what would you like to talk about?");
+    await space.send("Good Morning Prathksha☀️");
     await space.send(topicList(s));
   } catch (err) {
     console.error("Morning prompt error:", err);
